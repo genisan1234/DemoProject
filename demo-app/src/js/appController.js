@@ -35,8 +35,6 @@ define(['knockout', 'ojs/ojmodule-element-utils', 'ojs/ojknockouttemplateutils',
       let navData = [
         { path: '', redirect: 'dashboard' },
         { path: 'dashboard', detail: { label: 'Dashboard', iconClass: 'oj-ux-ico-bar-chart' } },
-        { path: 'incidents', detail: { label: 'Incidents', iconClass: 'oj-ux-ico-fire' } },
-        { path: 'customers', detail: { label: 'Customers', iconClass: 'oj-ux-ico-contact-group' } },
         { path: 'about', detail: { label: 'About', iconClass: 'oj-ux-ico-information-s' } }
       ];
 
@@ -70,9 +68,9 @@ define(['knockout', 'ojs/ojmodule-element-utils', 'ojs/ojknockouttemplateutils',
 
       // Header
       // Application Name used in Branding Area
-      this.appName = ko.observable("App Name");
+      this.appName = ko.observable("DemoApp");
       // User Info used in Global Navigation area
-      this.userLogin = ko.observable("john.hancock@oracle.com");
+      this.userLogin = ko.observable("sanu.kumar.saurav@oracle.com");
 
       // Footer
       this.footerLinks = [
