@@ -15,7 +15,6 @@
   selection-mode.row='single'
   selected.row='{{selectedRow}}'
   on-selected-changed='{{selectedListener}}'
-  
   columns='[{"headerText": "Employee No", "field": "EmployeeNo"},
             {"headerText": "Full Name","field": "FullName"},
             {"headerText": "DOB", "field": "DOB"},
@@ -24,7 +23,7 @@
             {"headerText": "Salary","field": "Salary"}]' >
 </oj-table>
 </div>
-<div id="form-container" style="width:50%;">
+<div id="form-container" class="hide-display" style="width:50%;">
     <h1 class="oj-typography-heading-xs">Edit Form</h1>
     <form id="editForm" action="http://127.0.0.1:8080/" method="post">
     <oj-form-layout>

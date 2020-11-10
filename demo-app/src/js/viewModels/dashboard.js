@@ -6,12 +6,13 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton'],
- function(accUtils,ArrayDataProvider,ko,$,keySet) {
+define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton'],
+ function(accUtils,ArrayDataProvider,ko,$,keySet,ConverterUtilsI18n) {
     function DashboardViewModel() {
      
       //-----------------'this' stored to a variable------------------------------------------------------//
       var self = this;
+      self.selectedrowidx
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Creating a data source for the table ----------------------------------//
       var url = 'js/store_data.json';
@@ -293,13 +294,12 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
       //-------------------------------------------------------------------------------------------------//
       //-------------------Defining event listener for submit button-------------------------------//
       self.submitForm = function(){ 
-        var date = new Date(document.getElementById('dateOfBirth').value);
-        date.setDate(date.getDate()-1);
+        
         $.post("http://localhost:8080/",
         {
           EmployeeNo:document.getElementById('employeeNo').value,
           FullName: document.getElementById('fullName').value,
-          DOB: date.toLocaleString(),
+          DOB: document.getElementById('dateOfBirth').value,
           Country: self.findElementWithCodeName(document.getElementById('countrySelect').value,countryData),
           Gender: self.findElementWithCodeName(document.getElementById('genderSelect').value,genderTypes),
           Salary: document.getElementById('salary').value
@@ -307,7 +307,8 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
         function(data,status){
         console.log(typeof parseInt(document.getElementById('salary')));
         });
-        window.location.href  = "http://localhost:8000/?ojr=about";
+        alert("Your information has been edited successfully");
+        window.location.replace("http://localhost:8000/?ojr=dashboard");
       }
       //--------------------------------------------------------------------------------------------//
       //-------------------------Row Selection listener ----------------------------------------------------//
@@ -327,22 +328,31 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
         }
       };
       self.selectedListener = function (event) {
-        var key = this.selectedRow().values().entries().next().value[0];
-        var data = self.EmployeesDataProvider().data[key];
+        if(document.getElementById('form-container').classList.contains('hide-display')){
+        document.getElementById('form-container').classList.remove('hide-display');
+        }
+        document.getElementById('form-container').classList.add('show-display');
+        var key = this.selectedRow().values().entries().next().value;
+        if(key){
+        var data = self.EmployeesDataProvider().data[key[0]];
         $('#employeeNo').val(data.EmployeeNo);
         $('#fullName').val(data.FullName);
         var name_array = data.FullName.split(' ');
         $('#firstName').val(name_array[0]);
         $('#lastName').val(name_array[1]);
-        var curr_date = new Date(data.DOB);
-        curr_date.setDate(curr_date.getDate()+1);
-        document.getElementById('dateOfBirth').value = curr_date.toISOString();
+        document.getElementById('dateOfBirth').value = data.DOB;
         self.countryVal(self.findElementWithCode(data.Country,countryData));
         self.genderVal(self.findElementWithCode(data.Gender,genderTypes));
         var num = parseInt(data.Salary)
         document.getElementById('salary').value = num;
-      }.bind(this);
+        }
+        else{
+          document.getElementById('form-container').classList.remove('show-display');
+          document.getElementById('form-container').classList.add('hide-display');
+        }
+        }.bind(this);
       //-----------------------------------------------------------------------------------------------------//
+   
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";
