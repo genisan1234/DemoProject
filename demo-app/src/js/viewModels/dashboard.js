@@ -6,8 +6,8 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton'],
- function(accUtils,ArrayDataProvider,ko,$,keySet,ConverterUtilsI18n) {
+define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton'],
+ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtilsI18n) {
     function DashboardViewModel() {
      
       //-----------------'this' stored to a variable------------------------------------------------------//
@@ -43,7 +43,7 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Dropdown list for selecting country  ----------------------------------//
       self.countryVal = ko.observable('IN');
-
+      
       var countryData =
       [ 
         {label: "Afghanistan", value: "AF"}, 
@@ -292,7 +292,8 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
       self.countryDataProvider = new ArrayDataProvider(countryData, { keyAttributes: 'value' });
     
       //-------------------------------------------------------------------------------------------------//
-      //-------------------Defining event listener for submit button-------------------------------//
+      
+      //-------------------Defining event Handler for submit button-------------------------------//
       self.submitForm = function(){ 
         
         $.post("http://localhost:8080/",
@@ -352,7 +353,39 @@ define(['accUtils','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout
         }
         }.bind(this);
       //-----------------------------------------------------------------------------------------------------//
-   
+        //-------------------------------------Adding logic for offcanvas content----------------------------//
+      
+        this.endDrawer = function(){
+        var drawer = {
+          selector: '#endDrawer',
+          content: '#canvasContainer',
+          modality: 'model'
+        };
+        drawer.displayMode = 'push';
+        
+        return OffcanvasUtils.open(drawer);
+        }.bind(this);
+        //---------------------------------------------------------------------------------------------------//
+        //------------------------Logic for New Employee Form submission -------------------------------------//
+          self.canvassubmitForm = function(){ 
+        
+          $.post("http://localhost:8080/",
+          {
+            EmployeeNo:document.getElementById('canvasemployeeNo').value,
+            FullName: document.getElementById('canvasfullName').value,
+            DOB: document.getElementById('canvasdateOfBirth').value,
+            Country: self.findElementWithCodeName(document.getElementById('canvascountrySelect').value,countryData),
+            Gender: self.findElementWithCodeName(document.getElementById('canvasgenderSelect').value,genderTypes),
+            Salary: document.getElementById('canvassalary').value
+          },
+          function(data,status){
+          
+          });
+          alert("Hello User, Your information has been submitted successfully");
+          window.location.replace("http://localhost:8000/?ojr=dashboard");
+        }
+
+        //----------------------------------------------------------------------------------------------------//
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";

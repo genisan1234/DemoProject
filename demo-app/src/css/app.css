@@ -15,10 +15,14 @@
   overflow: hidden;
 }
 .hide-display{
+  
   opacity:0;
-  transition:opacity 1s;
+  transition:opacity 1s ;
+ 
 }
 .show-display{
   opacity:1;
-  transition:opacity 1s;
+  transition:opacity 1s ;
+
+  
 }
