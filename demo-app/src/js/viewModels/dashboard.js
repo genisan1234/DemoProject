@@ -6,7 +6,7 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton'],
+define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','demo-item/loader'],
  function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtilsI18n) {
     function DashboardViewModel() {
      

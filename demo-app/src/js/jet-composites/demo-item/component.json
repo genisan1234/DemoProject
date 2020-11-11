@@ -1,0 +1,19 @@
+{
+  "name": "demo-item",
+  "version": "1.0.0",
+  "jetVersion": "^9.2.0",
+  "displayName": "demo-item",
+  "description": "Demo item is a demo for custom web component",
+  "properties": {
+ 
+  },
+  "methods": {
+
+  }, 
+  "events": {
+
+  }, 
+  "slots": {
+
+  }
+}

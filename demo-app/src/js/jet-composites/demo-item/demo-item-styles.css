@@ -1,0 +1,8 @@
+demo-item:not(.oj-complete){
+  visibility: hidden;
+}
+
+demo-item{
+	min-height: 50px;
+	width: 50px;
+}
