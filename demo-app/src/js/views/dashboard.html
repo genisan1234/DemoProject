@@ -8,7 +8,7 @@
     <oj-flex-item>
   <h1 class="oj-typography-heading-lg">Employees Data</h1>
   <h1 class="oj-typography-heading-xs">Employees Table</h1>
-  <oj-button style="border-radius:20px;background-color:green;" on-oj-action="[[endDrawer]]">+</oj-button>
+  <oj-button style="border-radius:10px;background-color:green;" on-oj-action="[[endDrawer]]">+</oj-button>
 <div>
   <div id="table-container" style="width:50%">
   <!--oj-table
@@ -89,7 +89,7 @@
                 </oj-bind-if>
             
                 <oj-bind-if test='[[cell.mode=="edit"]]'>
-                  <oj-input-text id="it1" value="{{rfl}}" class="editable"></oj-input-text>
+                  <oj-input-text id="it1"   value="{{rfl}}" class="editable"></oj-input-text>
             
                 </oj-bind-if>
               </template>
@@ -173,7 +173,7 @@
       <oj-label style="color:rgb(22, 4, 39)"> Employee No </oj-label>
       <oj-input-text id="employeeNo"   value = "" disabled="true" label-hint="Employee Number" label-edge="inside"></oj-input-text> 
     <oj-label style="color:rgb(22, 4, 39)"> First Name </oj-label>
-    <oj-input-text id="firstName"  value = "{{firstname}}" required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
+    <oj-input-text id="firstName"  value = "{{firstname}}" validators = '[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
     <oj-label style="color:rgb(22, 4, 39)"> Last Name </oj-label>
     <oj-input-text id="lastName"  value = "{{lastname}}" required="true" label-hint="Last Name" label-edge="inside"></oj-input-text>
     <oj-label style="color:rgb(22, 4, 39)"> Full Name </oj-label>
@@ -199,7 +199,7 @@
     </div>
 </oj-form-layout>
 </form>
-<input type="radio" id="esalary"> Edit Salary <br/>
+<input type="radio" id="esalary" style="margin:20px"> Edit Salary <br/>
 <demo-item ></demo-item>
 <oj-button id="submit" chroming="callToAction" on-oj-action="[[submitForm]] ">
  Submit
@@ -213,7 +213,7 @@
   <oj-form-layout>
   <div class="oj-sm-margin-2x-bottom">
     <oj-input-text id="canvasemployeeNo"   value = ""  label-hint="Employee Number" label-edge="inside"></oj-input-text> 
-  <oj-input-text id="canvasfirstName"  value = "{{firstname}}" required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
+  <oj-input-text id="canvasfirstName"  value = "{{firstname}}"  validators='[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
   <oj-input-text id="canvaslastName"  value = "{{lastname}}" required="true" label-hint="Last Name" label-edge="inside"></oj-input-text>
   <oj-input-text id="canvasfullName"  value = "[[fullname]]" disabled="true" label-hint="Full Name" label-edge="inside"></oj-input-text>
   <oj-input-date id="canvasdateOfBirth"  value = "" label-hint="Date Of Birth" label-edge="inside"></oj-input-date>

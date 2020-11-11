@@ -6,8 +6,8 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojbootstrap','ojs/ojbufferingdataprovider','ojs/ojconverter-number','ojs/ojconverter-datetime','ojs/ojvalidator-numberrange','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','ojs/ojselectcombobox', 'ojs/ojcheckboxset','ojs/ojtoolbar', 'ojs/ojmessages','demo-item/loader'],
- function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator) {
+define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojbootstrap','ojs/ojbufferingdataprovider','ojs/ojconverter-number','ojs/ojconverter-datetime','ojs/ojvalidator-numberrange','ojs/ojasyncvalidator-regexp','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','ojs/ojselectcombobox', 'ojs/ojcheckboxset','ojs/ojtoolbar', 'ojs/ojmessages','demo-item/loader'],
+ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator,AsyncRegExpValidator) {
     function DashboardViewModel() {
      
       //-----------------'this' stored to a variable------------------------------------------------------//
@@ -19,6 +19,16 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
         }
         return $('#salary').val();
       }
+          this.validators=
+          [
+            new AsyncRegExpValidator({
+              pattern: '.{6,}',
+              label: "First Name",
+              messageSummary: "{label} Invalid",
+              messageDetail: "Enter a first name with at least 6 characters"
+            })
+          ];
+    
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Creating a data source for the table ----------------------------------//
       var url = 'js/store_data.json';
