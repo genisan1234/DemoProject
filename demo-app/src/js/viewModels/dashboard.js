@@ -6,17 +6,24 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','demo-item/loader'],
- function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtilsI18n) {
+define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojbootstrap','ojs/ojbufferingdataprovider','ojs/ojconverter-number','ojs/ojconverter-datetime','ojs/ojvalidator-numberrange','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','ojs/ojselectcombobox', 'ojs/ojcheckboxset','ojs/ojtoolbar', 'ojs/ojmessages','demo-item/loader'],
+ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator) {
     function DashboardViewModel() {
      
       //-----------------'this' stored to a variable------------------------------------------------------//
       var self = this;
-      self.selectedrowidx
+      self.submitSalary=function(){
+        var val = document.getElementById('esalary').checked;
+        if(val){
+          return $('#ssalary').val();
+        }
+        return $('#salary').val();
+      }
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Creating a data source for the table ----------------------------------//
       var url = 'js/store_data.json';
       self.EmployeesDataProvider = ko.observable();
+      self.employeesData=ko.observable() ;
       $.getJSON(url).then(function(data){
         var employeesData = data;
         self.EmployeesDataProvider(new ArrayDataProvider(employeesData,{KeyAttributes: 'EmployeeNo'}));
@@ -303,7 +310,7 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
           DOB: document.getElementById('dateOfBirth').value,
           Country: self.findElementWithCodeName(document.getElementById('countrySelect').value,countryData),
           Gender: self.findElementWithCodeName(document.getElementById('genderSelect').value,genderTypes),
-          Salary: document.getElementById('salary').value
+          Salary: self.submitSalary()
         },
         function(data,status){
         console.log(typeof parseInt(document.getElementById('salary')));
@@ -337,15 +344,21 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
         if(key){
         var data = self.EmployeesDataProvider().data[key[0]];
         $('#employeeNo').val(data.EmployeeNo);
+        self.remp(data.EmployeeNo);
         $('#fullName').val(data.FullName);
+        self.rfl(data.FullName);
         var name_array = data.FullName.split(' ');
         $('#firstName').val(name_array[0]);
         $('#lastName').val(name_array[1]);
         document.getElementById('dateOfBirth').value = data.DOB;
+        self.rdob(data.DOB);
         self.countryVal(self.findElementWithCode(data.Country,countryData));
+        self.rc(self.countryVal());
         self.genderVal(self.findElementWithCode(data.Gender,genderTypes));
+        self.rg(self.genderVal())
         var num = parseInt(data.Salary)
         document.getElementById('salary').value = num;
+        self.rs(num);
         }
         else{
           document.getElementById('form-container').classList.remove('show-display');
@@ -386,6 +399,46 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
         }
 
         //----------------------------------------------------------------------------------------------------//
+
+        //-------------------------------Row Editable Table---------------------------------------------------//
+ 
+          this.editRow = ko.observable();
+      
+          this.handleUpdate = function (event, context) {
+            this.editRow({ rowKey: context.key });
+          }.bind(this);
+          self.submitTable=function(){
+            $.post("http://localhost:8080/",
+            {
+              EmployeeNo:self.remp(),
+              FullName: self.rfl(),
+              DOB: self.rdob(),
+              Country: self.findElementWithCodeName(self.rc(),countryData),
+              Gender: self.findElementWithCodeName(self.rg(),genderTypes),
+              Salary: self.rs()
+            },
+            function(data,status){
+            console.log(typeof parseInt(document.getElementById('salary')));
+            });
+            alert("Your information has been edited successfully");
+            window.location.replace("http://localhost:8000/?ojr=dashboard");
+          }    
+          
+          this.handleDone = function (event, context) {
+            this.editRow({ rowKey: null });
+            self.submitTable();
+            
+          }.bind(this);
+      
+          this.departments = new ArrayDataProvider([{label: 'Sales'}, {label: 'HR'}, {label: 'Marketing'}, {label: 'Finance'}], {keyAttributes: 'label'});
+        
+        self.rc=ko.observable();
+        self.rg=ko.observable();
+        self.rdob=ko.observable();
+        self.rfl=ko.observable();
+        self.rs=ko.observable();
+        self.remp=ko.observable();
+        //-----------------------------------------------------------------------------------------------------//
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";

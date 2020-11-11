@@ -11,7 +11,7 @@
   <oj-button style="border-radius:20px;background-color:green;" on-oj-action="[[endDrawer]]">+</oj-button>
 <div>
   <div id="table-container" style="width:50%">
-  <oj-table
+  <!--oj-table
   aria-label="Employees Table"
   data='{{EmployeesDataProvider}}'
   scroll-policy='loadMoreOnScroll'
@@ -25,8 +25,140 @@
             {"headerText": "Country", "field": "Country"},
             {"headerText": "Gender", "field": "Gender"},
             {"headerText": "Salary","field": "Salary"}]' >
-</oj-table>
+</oj-table-->
 </div>
+<div id="tableWrapper">                           
+            <oj-table id="table"
+                      aria-label="Departments Table"
+                      data='[[EmployeesDataProvider]]'
+                      edit-mode='rowEdit'
+                      edit-row='{{editRow}}'
+                      columns-default.sortable='disabled'
+                      scroll-policy='loadMoreOnScroll'
+                      scroll-policy-options='{"fetchSize": 10}'
+                      selection-mode.row='single'
+                      selected.row='{{selectedRow}}'
+                      on-selected-changed='{{selectedListener}}'
+                      columns='[{"field": "EmployeeNo",
+                                 "headerText": "Employee No",
+                                 "headerStyle": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "headerClassName": "oj-helper-text-align-end",
+                                 "style": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "className": "oj-helper-text-align-end oj-read-only",
+                                 "template": "empNoTemplate"},
+                                {"field": "FullName",
+                                 "headerText": "Full Name",
+                                 "headerStyle": "min-width: 15em; max-width: 15em; width: 15em",
+                                 "style": "min-width: 15em; max-width: 15em; width: 15em",
+                                 "template": "FullNameTemplate"},
+                                {"field":"Salary",
+                                 "headerText": "Salary",
+                                 "headerStyle": "min-width: 12em; max-width: 12em; width: 12em",
+                                 "headerClassName": "oj-helper-text-align-end",
+                                 "style": "min-width: 12em; max-width: 12em; width: 12em",
+                                 "className": "oj-helper-text-align-end",
+                                 "template": "salaryTemplate"},
+                                {"field":"Gender",
+                                 "headerText": "Gender",
+                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "style": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "template": "genderTemplate"},
+                                {"field":"Country",
+                                 "headerText": "Country",
+                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "style": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "template": "countryTemplate"},
+                
+                                {"field":"DOB",
+                                 "headerText": "DOB",
+                                 "headerStyle": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "style": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "template": "dobTemplate"},
+                                 {"headerText": "Action",
+                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em; text-align: center;",
+                                 "style":"min-width: 10em; max-width: 10em; width: 10em; padding-top: 0px; padding-bottom: 0px; text-align: center;",
+                                 "template": "actionTemplate"}]'>
+            
+              <template slot="empNoTemplate" data-oj-as="cell">
+                <oj-bind-text id="cemployeeNo" value="[[cell.data]]"></oj-bind-text>
+              </template>
+            
+              <template slot="FullNameTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-bind-text  value="[[cell.data]]"></oj-bind-text>
+                </oj-bind-if>
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-input-text id="it1" value="{{rfl}}" class="editable"></oj-input-text>
+            
+                </oj-bind-if>
+              </template>
+            
+              <template slot="salaryTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-bind-text  value="[[cell.data]]"></oj-bind-text>
+                </oj-bind-if>
+            
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-input-text id="it2" value="{{rs}}"   class="editable"></oj-input-text>
+                </oj-bind-if>
+              </template>
+          
+              <template slot="genderTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-bind-text  value="[[cell.data]]"></oj-bind-text>
+                </oj-bind-if>
+            
+            
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-select-single id="ss1" aria-label="type 1" value='{{rg}}' data='[[genderTypesProvider]]' class="editable">
+                  </oj-select-single>
+                </oj-bind-if>
+              </template>
+              
+          
+              <template slot="countryTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-bind-text value="[[cell.data]]"></oj-bind-text>
+                </oj-bind-if>
+            
+            
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-select-single id="ss2" aria-label="type 2" value='{{rc}}' data='[[countryDataProvider]]' class="editable">
+                  </oj-select-single>
+                </oj-bind-if>
+              </template>
+            
+              <template slot="dobTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-bind-text value="[[cell.data]]"></oj-bind-text>
+                </oj-bind-if>
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-input-date id="id1" value="{{rdob}}" class="editable"> </oj-input-date>
+                </oj-bind-if>
+              </template>
+            
+            
+              <template slot="actionTemplate" data-oj-as="cell">
+                <oj-bind-if test='[[cell.mode=="navigation"]]'>
+                  <oj-button on-oj-action="[[handleUpdate]]" style="width:5em;margin-bottom: 0px;"><span>Edit</span></oj-button>
+                </oj-bind-if>
+            
+                <oj-bind-if test='[[cell.mode=="edit"]]'>
+                  <oj-button on-oj-action="[[handleDone]]" style="width:5em;margin-bottom: 0px;"><span>Save</span></oj-button>
+                </oj-bind-if>
+              </template>
+            
+            </oj-table>
+            
+            
+          </div>    
+          
+<!------test table end-->
 <div id="canvasContainer">
 
 </div>
@@ -63,10 +195,11 @@
     value="{{genderVal}}">
   </oj-select-single>
     <oj-label style="color:rgb(22, 4, 39)"> Salary </oj-label>
-    
+    <oj-input-number aria-label='currency-output'  id="salary" disabled="true" label-hint="$"></oj-input-number>
     </div>
 </oj-form-layout>
 </form>
+<input type="radio" id="esalary"> Edit Salary <br/>
 <demo-item ></demo-item>
 <oj-button id="submit" chroming="callToAction" on-oj-action="[[submitForm]] ">
  Submit
