@@ -6,12 +6,15 @@
 <div class="oj-hybrid-padding">
   <h1 class="oj-typography-heading-lg">Employees Data</h1>
   <h1 class="oj-typography-heading-xs">Employees Table</h1>
+  <div class="oj-bg-warning-10 oj-panel">
   <oj-button style="border-radius:10px;background-color:green;" on-oj-action="[[endDrawer]]">+</oj-button>
+  <oj-input-text id="search"   value = ""  label-hint="Search By Name" style="width:25%;" on-value-changed='{{valueChangedListener}}' label-edge="inside"></oj-input-text> 
+  </div>
 <div>
   <div id="table-container" style="width:50%">
   <!--oj-table
   aria-label="Employees Table"
-  data='{{EmployeesDataProvider}}'
+  data='{{SearchDataProvider}}'
   scroll-policy='loadMoreOnScroll'
   scroll-policy-options='{"fetchSize": 10}'
   selection-mode.row='single'
@@ -25,7 +28,8 @@
             {"headerText": "Salary","field": "Salary"}]' >
 </oj-table-->
 </div>
-<div id="tableWrapper">                           
+<div id="tableWrapper" class="oj-bg-warning-10 oj-panel">       
+                   
             <oj-table id="table"
                       aria-label="Departments Table"
                       data='[[EmployeesDataProvider]]'
@@ -39,42 +43,44 @@
                       on-selected-changed='{{selectedListener}}'
                       columns='[{"field": "EmployeeNo",
                                  "headerText": "Employee No",
-                                 "headerStyle": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "headerStyle": "max-width: 8em; width: 8em",
                                  "headerClassName": "oj-helper-text-align-end",
-                                 "style": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "style": "max-width: 8em; width: 8em",
                                  "className": "oj-helper-text-align-end oj-read-only",
                                  "template": "empNoTemplate"},
                                 {"field": "FullName",
                                  "headerText": "Full Name",
-                                 "headerStyle": "min-width: 15em; max-width: 15em; width: 15em",
-                                 "style": "min-width: 15em; max-width: 15em; width: 15em",
-                                 "template": "FullNameTemplate"},
+                                 "headerStyle": "max-width: 15em; width: 15em",
+                                 "style": "max-width: 15em; width: 15em",
+                                 "template": "FullNameTemplate",
+                                 "resizable":"enabled"},
                                 {"field":"Salary",
-                                 "headerText": "Salary",
-                                 "headerStyle": "min-width: 12em; max-width: 12em; width: 12em",
+                                 "headerText": "Salary($)",
+                                 "headerStyle": "max-width: 12em; width: 12em",
                                  "headerClassName": "oj-helper-text-align-end",
-                                 "style": "min-width: 12em; max-width: 12em; width: 12em",
+                                 "style": "max-width: 12em; width: 12em",
                                  "className": "oj-helper-text-align-end",
-                                 "template": "salaryTemplate"},
+                                 "template": "salaryTemplate",
+                                "resizable":"enabled"},
                                 {"field":"Gender",
                                  "headerText": "Gender",
-                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em",
-                                 "style": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "headerStyle": "max-width: 10em; width: 10em",
+                                 "style": "max-width: 10em; width: 10em",
                                  "template": "genderTemplate"},
                                 {"field":"Country",
                                  "headerText": "Country",
-                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em",
-                                 "style": "min-width: 10em; max-width: 10em; width: 10em",
+                                 "headerStyle": "max-width: 10em; width: 10em",
+                                 "style": "max-width: 10em; width: 10em",
                                  "template": "countryTemplate"},
                 
                                 {"field":"DOB",
                                  "headerText": "DOB",
-                                 "headerStyle": "min-width: 8em; max-width: 8em; width: 8em",
-                                 "style": "min-width: 8em; max-width: 8em; width: 8em",
+                                 "headerStyle": "max-width: 8em; width: 8em",
+                                 "style": "max-width: 8em; width: 8em",
                                  "template": "dobTemplate"},
                                  {"headerText": "Action",
-                                 "headerStyle": "min-width: 10em; max-width: 10em; width: 10em; text-align: center;",
-                                 "style":"min-width: 10em; max-width: 10em; width: 10em; padding-top: 0px; padding-bottom: 0px; text-align: center;",
+                                 "headerStyle": "max-width: 10em; width: 10em; text-align: center;",
+                                 "style":"max-width: 10em; width: 10em; padding-top: 0px; padding-bottom: 0px; text-align: center;",
                                  "template": "actionTemplate"}]'>
             
               <template slot="empNoTemplate" data-oj-as="cell">
@@ -152,80 +158,103 @@
               </template>
             
             </oj-table>
-            
-            
-          </div>    
-          
+                
+         </div>
+         
 <!------test table end-->
 <div id="canvasContainer">
 
 </div>
 </div>
-<div id="form-container" class="hide-display" style="width:50%;">
+<div id="form-container" class="hide-display oj-bg-neutral-20 oj-panel" style="max-width:100%">
     <h1 class="oj-typography-heading-xs">Edit Form</h1>
-    <form id="editForm" action="http://127.0.0.1:8080/" method="post">
-    <oj-form-layout>
-    <div class="oj-sm-margin-2x-bottom">
-      <oj-label style="color:rgb(22, 4, 39)"> Employee No </oj-label>
-      <oj-input-text id="employeeNo"   value = "" disabled="true" label-hint="Employee Number" label-edge="inside"></oj-input-text> 
-    <oj-label style="color:rgb(22, 4, 39)"> First Name </oj-label>
-    <oj-input-text id="firstName"  value = "{{firstname}}" validators = '[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
-    <oj-label style="color:rgb(22, 4, 39)"> Last Name </oj-label>
-    <oj-input-text id="lastName"  value = "{{lastname}}" required="true" label-hint="Last Name" label-edge="inside"></oj-input-text>
-    <oj-label style="color:rgb(22, 4, 39)"> Full Name </oj-label>
-    <oj-input-text id="fullName"  value = "[[fullname]]" disabled="true" label-hint="Full Name" label-edge="inside"></oj-input-text>
-    <oj-label style="color:rgb(22, 4, 39)"> Date Of Birth </oj-label>
-    <oj-input-date id="dateOfBirth"  value = "" label-hint="Date Of Birth" label-edge="inside"></oj-input-date>
-    <oj-label style="color:rgb(22, 4, 39)"> Country </oj-label>
+    <div class="oj-sm-margin-2x-bottom oj-bg-brand-10 oj-panel">
+    <form id="editForm" style="max-width:90%" action="http://127.0.0.1:8080/" method="post">
+    
+    <div style="max-width:15em;float:left;padding:10px">
+    <oj-input-text id="employeeNo"   value = "" disabled="true"  label-hint="Employee Number" label-edge="inside"></oj-input-text> 
+    </div>
+    <div style="max-width:15em;float:left;padding:10px">
+    <oj-input-text id="firstName"  value = "{{firstname}}" style="max-width:15em;float:left" validators = '[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
+    </div>
+    <div style="max-width:15em;float:left;padding:10px">
+    <oj-input-text id="lastName"  value = "{{lastname}}" required="true" style="max-width:15em;" label-hint="Last Name" label-edge="inside"></oj-input-text>
+  </div>
+  <div style="max-width:15em;float:left;padding:10px"> 
+    <oj-input-text id="fullName"  value = "[[fullname]]" disabled="true" style="max-width:15em;" label-hint="Full Name" label-edge="inside"></oj-input-text>
+  </div>
+  <div style="max-width:15em;float:left;padding:10px"> 
+    <oj-input-date id="dateOfBirth"  value = "" label-hint="Date Of Birth" style="max-width:15em;" label-edge="inside"></oj-input-date>
+  </div>
     <oj-select-single id="countrySelect"
     label-hint="Country"
-    style="max-width:12em"
+    style="min-width:10em;max-width:15em;padding-left:10px;padding-right:10px"
     data="[[countryDataProvider]]" 
     value="{{countryVal}}">
   </oj-select-single>
-    <oj-label style="color:rgb(22, 4, 39)"> Gender </oj-label>
+  
     <oj-select-single id="genderSelect"
     label-hint="Gender"
-    style="max-width:12em"
+    style="max-width:15em;padding-right:10px"
     data="[[genderTypesProvider]]" 
     value="{{genderVal}}">
   </oj-select-single>
-    <oj-label style="color:rgb(22, 4, 39)"> Salary </oj-label>
-    <oj-input-number aria-label='currency-output'  id="salary" disabled="true" label-hint="$"></oj-input-number>
-    </div>
-</oj-form-layout>
+    <oj-input-number aria-label='currency-output'  id="salary" disabled="true" style="max-width:15em;" label-hint="$"></oj-input-number>
+</div> 
 </form>
-<input type="radio" id="esalary" style="margin:20px"> Edit Salary <br/>
-<demo-item ></demo-item>
-<oj-button id="submit" chroming="callToAction" on-oj-action="[[submitForm]] ">
+<div class="oj-bg-brand-10 oj-panel">
+<div>
+<input type="checkbox" id="esalary" style="margin-left:10px"> Edit Salary <br/>
+</div>
+<demo-item></demo-item>
+<div>
+  </div>
+<oj-button id="submit" chroming="callToAction" style="margin-left:10px" on-oj-action="[[submitForm]] ">
  Submit
 </oj-button>
 </div>
-<div id="endDrawer" class="oj-offcanvas-top oj-panel oj-bg-danger-30 oj-offcanvas-overlay-shadow" style="width:750px;height:1000px;padding:100px;" >
+</div>
+<div id="endDrawer" class="oj-offcanvas-start oj-panel oj-bg-info-30 oj-offcanvas-overlay-shadow" style="max-width:730px;height:630px;padding:100px;padding-left:200px" >
   <h1 class="oj-typography-heading-xs">New Employee  Form</h1>
   <form id="canvasForm" action="http://127.0.0.1:8080/" method="post">
   <oj-form-layout>
   <div class="oj-sm-margin-2x-bottom">
+    <div style="max-width:12em;float:left;padding:10px">
     <oj-input-text id="canvasemployeeNo"   value = ""  label-hint="Employee Number" label-edge="inside"></oj-input-text> 
-  <oj-input-text id="canvasfirstName"  value = "{{firstname}}"  validators='[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
-  <oj-input-text id="canvaslastName"  value = "{{lastname}}" required="true" label-hint="Last Name" label-edge="inside"></oj-input-text>
-  <oj-input-text id="canvasfullName"  value = "[[fullname]]" disabled="true" label-hint="Full Name" label-edge="inside"></oj-input-text>
-  <oj-input-date id="canvasdateOfBirth"  value = "" label-hint="Date Of Birth" label-edge="inside"></oj-input-date>
-  <oj-select-single id="canvascountrySelect"
+    </div>
+    <div style="max-width:12em;float:left;padding:10px">
+    <oj-input-text id="canvasfirstName"  value = "{{firstname}}"  validators='[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
+    </div>
+    <div style="max-width:12em;float:left;padding:10px">
+    <oj-input-text id="canvaslastName"  value = "{{lastname}}" required="true" label-hint="Last Name" label-edge="inside"></oj-input-text>
+    </div>
+    <div style="max-width:12em;float:left;padding:10px">
+    <oj-input-text id="canvasfullName"  value = "[[fullname]]" disabled="true" label-hint="Full Name" label-edge="inside"></oj-input-text>
+    </div>
+    <div style="max-width:12em;float:left;padding:10px">
+    <oj-input-date id="canvasdateOfBirth"  value = "" label-hint="Date Of Birth" label-edge="inside"></oj-input-date>
+    </div>
+    <div style="max-width:12em;float:left;padding:10px">
+    <oj-select-single id="canvascountrySelect"
   label-hint="Country"
-  style="max-width:12em"
+  style="min-width:10em;max-width:12em"
   data="[[countryDataProvider]]" 
   value="{{countryVal}}">
 </oj-select-single>
-  <oj-label style="color:rgb(22, 4, 39)"> Gender </oj-label>
+</div>
+<div style="max-width:12em;float:left;padding:10px">
+
   <oj-select-single id="canvasgenderSelect"
   label-hint="Gender"
-  style="max-width:12em"
+  style="min-width:10em;max-width:12em"
   data="[[genderTypesProvider]]" 
   value="{{genderVal}}">
 </oj-select-single>
+</div>
+<div style="min-width:10em;max-width:12em;float:left;padding:10px">
   <oj-input-number id="canvassalary" value=25000 required="true" label-hint="10000-35000" min="10000" max="35000"></oj-input-number>
-  </div>
+</div>  
+</div>
 </oj-form-layout>
 </form>
 <oj-button id="canvassubmit" chroming="callToAction" on-oj-action="[[canvassubmitForm]] ">

@@ -7,19 +7,22 @@
  */
 
 define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojbootstrap','ojs/ojbufferingdataprovider','ojs/ojconverter-number','ojs/ojconverter-datetime','ojs/ojvalidator-numberrange','ojs/ojasyncvalidator-regexp','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','ojs/ojselectcombobox', 'ojs/ojcheckboxset','ojs/ojtoolbar', 'ojs/ojmessages','demo-item/loader'],
- function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator,AsyncRegExpValidator) {
+function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator,AsyncRegExpValidator) {
     function DashboardViewModel() {
      
       //-----------------'this' stored to a variable------------------------------------------------------//
       var self = this;
+      //-----------------Logic for using currency converter based on the status of radio button ---------//
       self.submitSalary=function(){
         var val = document.getElementById('esalary').checked;
         if(val){
           return $('#ssalary').val();
         }
         return $('#salary').val();
-      }
-          this.validators=
+      };
+        //---------------------------------------------------------------------------------------------------//
+        //--------------------'Defining validator for the first name ---------------------------------------// 
+      this.validators=
           [
             new AsyncRegExpValidator({
               pattern: '.{6,}',
@@ -28,16 +31,22 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
               messageDetail: "Enter a first name with at least 6 characters"
             })
           ];
+    //---------------------------------------------------------------------------------------------------//
     
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Creating a data source for the table ----------------------------------//
-      var url = 'js/store_data.json';
+      var url = 'http://127.0.0.1:8080/employees/';
       self.EmployeesDataProvider = ko.observable();
-      self.employeesData=ko.observable() ;
+      /*
       $.getJSON(url).then(function(data){
         var employeesData = data;
         self.EmployeesDataProvider(new ArrayDataProvider(employeesData,{KeyAttributes: 'EmployeeNo'}));
       });
+      */
+     $.get(url,function(data,status){
+       var employeesData=data;
+      self.EmployeesDataProvider(new ArrayDataProvider(employeesData,{KeyAttributes: 'EmployeeNo'}));
+     });
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- knockout precomputation for full name ----------------------------------//
       self.firstname = ko.observable("");
@@ -48,7 +57,6 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Dropdown list for selecting gender  ----------------------------------//
       self.genderVal = ko.observable('M');
-  
       var genderTypes = [
         { value: 'M', label: 'Male' },
         { value: 'F', label: 'Female' },
@@ -60,7 +68,6 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
       //-------------------------------------------------------------------------------------------------//
       //-------------------------- Dropdown list for selecting country  ----------------------------------//
       self.countryVal = ko.observable('IN');
-      
       var countryData =
       [ 
         {label: "Afghanistan", value: "AF"}, 
@@ -323,34 +330,36 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
           Salary: self.submitSalary()
         },
         function(data,status){
-        console.log(typeof parseInt(document.getElementById('salary')));
+
         });
         alert("Your information has been edited successfully");
         window.location.replace("http://localhost:8000/?ojr=dashboard");
-      }
+      };
       //--------------------------------------------------------------------------------------------//
       //-------------------------Row Selection listener ----------------------------------------------------//
       self.selectedRow = new keySet.ObservableKeySet();
       self.findElementWithCode=function(name,data){
-        for(ele of data){
+        for(var ele of data){
           if(ele.label==name){
             return ele.value;
           }
         }
       };
       self.findElementWithCodeName=function(name,data){
-        for(ele of data){
+        for(var ele of data){
           if(ele.value==name){
             return ele.label;
           }
         }
       };
+      
       self.selectedListener = function (event) {
         if(document.getElementById('form-container').classList.contains('hide-display')){
         document.getElementById('form-container').classList.remove('hide-display');
         }
         document.getElementById('form-container').classList.add('show-display');
         var key = this.selectedRow().values().entries().next().value;
+        
         if(key){
         var data = self.EmployeesDataProvider().data[key[0]];
         $('#employeeNo').val(data.EmployeeNo);
@@ -365,8 +374,8 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
         self.countryVal(self.findElementWithCode(data.Country,countryData));
         self.rc(self.countryVal());
         self.genderVal(self.findElementWithCode(data.Gender,genderTypes));
-        self.rg(self.genderVal())
-        var num = parseInt(data.Salary)
+        self.rg(self.genderVal());
+        var num = parseInt(data.Salary);
         document.getElementById('salary').value = num;
         self.rs(num);
         }
@@ -406,7 +415,7 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
           });
           alert("Hello User, Your information has been submitted successfully");
           window.location.replace("http://localhost:8000/?ojr=dashboard");
-        }
+        };
 
         //----------------------------------------------------------------------------------------------------//
 
@@ -432,16 +441,14 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
             });
             alert("Your information has been edited successfully");
             window.location.replace("http://localhost:8000/?ojr=dashboard");
-          }    
+          };    
           
           this.handleDone = function (event, context) {
             this.editRow({ rowKey: null });
             self.submitTable();
             
           }.bind(this);
-      
-          this.departments = new ArrayDataProvider([{label: 'Sales'}, {label: 'HR'}, {label: 'Marketing'}, {label: 'Finance'}], {keyAttributes: 'label'});
-        
+
         self.rc=ko.observable();
         self.rg=ko.observable();
         self.rdob=ko.observable();
@@ -449,6 +456,19 @@ define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquer
         self.rs=ko.observable();
         self.remp=ko.observable();
         //-----------------------------------------------------------------------------------------------------//
+        //-----------------------------Search Functionality--------------------------------------------------//
+
+        
+        self.valueChangedListener=function(){
+          var searchurl=url+"name/"+$('#search').val()
+          $.get(searchurl,function(data,status){
+            var employeesData = data;
+            self.EmployeesDataProvider(new ArrayDataProvider(employeesData,{KeyAttributes: 'EmployeeNo'}));
+          });
+          
+        };
+        //-----------------------------------------------------------------------------------------------------//
+  
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";

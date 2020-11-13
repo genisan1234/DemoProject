@@ -4,14 +4,11 @@
   as shown at https://oss.oracle.com/licenses/upl/
 
 -->
-<div style="width:50%">
 <oj-select-single aria-label='currency converter' 
 label-hint="Currency"
-style="max-width:12em"
+style="max-width:10em;float:left;padding:10px;"
 data="[[currencyDataProvider]]" 
 value="{{currVal}}">
 </oj-select-single>
-  <oj-input-number aria-label='currency-input' value="{{inputVal}}" required="true" ></oj-input-number>
-  <oj-input-number aria-label='currency-output' value="{{outputVal}}" id="ssalary" disabled="true" label-hint="$" ></oj-input-number>
-  
-</div>
+  <oj-input-number aria-label='currency-input' value="{{inputVal}}" style="max-width:10em;float:left;padding:10px" label-hint='X' required="true" ></oj-input-number>
+  <oj-input-number aria-label='currency-output' value="{{outputVal}}" style="max-width:10em;padding:10px" id="ssalary" disabled="true" label-hint="$" ></oj-input-number>
