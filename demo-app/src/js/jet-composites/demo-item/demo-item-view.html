@@ -10,5 +10,6 @@ style="max-width:10em;float:left;padding:10px;"
 data="[[currencyDataProvider]]" 
 value="{{currVal}}">
 </oj-select-single>
+  <!--oj-input-number aria-label='currency-test' value="{{$properties.itemId}}" style="display:none"></oj-input-number-->
   <oj-input-number aria-label='currency-input' value="{{inputVal}}" style="max-width:10em;float:left;padding:10px" label-hint='X' required="true" ></oj-input-number>
-  <oj-input-number aria-label='currency-output' value="{{outputVal}}" style="max-width:10em;padding:10px" id="ssalary" disabled="true" label-hint="$" ></oj-input-number>
+  <oj-input-number aria-label='currency-output' value="{{outputVal}}" style="max-width:10em;padding:10px" :id="[[$properties.itemId]]" disabled="true" label-hint="$" ></oj-input-number>

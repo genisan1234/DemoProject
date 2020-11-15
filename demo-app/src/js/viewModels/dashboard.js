@@ -6,10 +6,29 @@
  * @ignore
  */
 
-define(['accUtils','ojs/ojoffcanvas','ojs/ojarraydataprovider','knockout','jquery','ojs/ojknockout-keyset','ojs/ojconverterutils-i18n','ojs/ojbootstrap','ojs/ojbufferingdataprovider','ojs/ojconverter-number','ojs/ojconverter-datetime','ojs/ojvalidator-numberrange','ojs/ojasyncvalidator-regexp','ojs/ojknockout','ojs/ojtable','ojs/ojinputtext','ojs/ojlabel','ojs/ojformlayout',"ojs/ojdatetimepicker","ojs/ojselectsingle",'ojs/ojlistview','ojs/ojbutton','ojs/ojselectcombobox', 'ojs/ojcheckboxset','ojs/ojtoolbar', 'ojs/ojmessages','demo-item/loader'],
-function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bootstrap,BufferingDataProvider,NumberConverter,DateTimeConverter,NumberRangeValidator,AsyncRegExpValidator) {
+define(["accUtils",
+    "ojs/ojoffcanvas",
+    "ojs/ojarraydataprovider",
+    "knockout",
+    "jquery",
+    "ojs/ojknockout-keyset",
+    "ojs/ojasyncvalidator-regexp",
+    "ojs/ojknockout",
+    "ojs/ojtable",
+    "ojs/ojinputtext",
+    "ojs/ojlabel",
+    "ojs/ojformlayout",
+    "ojs/ojdatetimepicker",
+    "ojs/ojselectsingle",
+    "ojs/ojlistview",
+    "ojs/ojbutton",
+    "ojs/ojtoolbar",
+    "demo-item/loader"
+],
+function (accUtils, OffcanvasUtils, ArrayDataProvider, ko, $,keySet, AsyncRegExpValidator) {
+
     function DashboardViewModel() {
-     
+      
       //-----------------'this' stored to a variable------------------------------------------------------//
       var self = this;
       //-----------------Logic for using currency converter based on the status of radio button ---------//
@@ -221,7 +240,7 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
         {label: "Namibia", value: "NA"}, 
         {label: "Nauru", value: "NR"}, 
         {label: "Nepal", value: "NP"}, 
-        {label: "Netherlands", value: "NL"}, 
+        {label: "Netherlands", value: "NL"},
         {label: "Netherlands Antilles", value: "AN"}, 
         {label: "New Caledonia", value: "NC"}, 
         {label: "New Zealand", value: "NZ"}, 
@@ -328,9 +347,6 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
           Country: self.findElementWithCodeName(document.getElementById('countrySelect').value,countryData),
           Gender: self.findElementWithCodeName(document.getElementById('genderSelect').value,genderTypes),
           Salary: self.submitSalary()
-        },
-        function(data,status){
-
         });
         alert("Your information has been edited successfully");
         window.location.replace("http://localhost:8000/?ojr=dashboard");
@@ -353,7 +369,7 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
         }
       };
       
-      self.selectedListener = function (event) {
+      self.selectedListener = function () {
         if(document.getElementById('form-container').classList.contains('hide-display')){
         document.getElementById('form-container').classList.remove('hide-display');
         }
@@ -366,9 +382,9 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
         self.remp(data.EmployeeNo);
         $('#fullName').val(data.FullName);
         self.rfl(data.FullName);
-        var name_array = data.FullName.split(' ');
-        $('#firstName').val(name_array[0]);
-        $('#lastName').val(name_array[1]);
+        var nameArray = data.FullName.split(' ');
+        $('#firstName').val(nameArray[0]);
+        $('#lastName').val(nameArray[1]);
         document.getElementById('dateOfBirth').value = data.DOB;
         self.rdob(data.DOB);
         self.countryVal(self.findElementWithCode(data.Country,countryData));
@@ -378,8 +394,7 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
         var num = parseInt(data.Salary);
         document.getElementById('salary').value = num;
         self.rs(num);
-        }
-        else{
+        }else{
           document.getElementById('form-container').classList.remove('show-display');
           document.getElementById('form-container').classList.add('hide-display');
         }
@@ -409,9 +424,6 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
             Country: self.findElementWithCodeName(document.getElementById('canvascountrySelect').value,countryData),
             Gender: self.findElementWithCodeName(document.getElementById('canvasgenderSelect').value,genderTypes),
             Salary: document.getElementById('canvassalary').value
-          },
-          function(data,status){
-          
           });
           alert("Hello User, Your information has been submitted successfully");
           window.location.replace("http://localhost:8000/?ojr=dashboard");
@@ -427,25 +439,31 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
             this.editRow({ rowKey: context.key });
           }.bind(this);
           self.submitTable=function(){
-            $.post("http://localhost:8080/",
-            {
+            
+            $.ajax(
+              {
+              url: "http://localhost:8080/",
+              type: "POST",
+              dataType: "json",
+              data:{
               EmployeeNo:self.remp(),
               FullName: self.rfl(),
               DOB: self.rdob(),
               Country: self.findElementWithCodeName(self.rc(),countryData),
               Gender: self.findElementWithCodeName(self.rg(),genderTypes),
               Salary: self.rs()
-            },
-            function(data,status){
-            console.log(typeof parseInt(document.getElementById('salary')));
+            }
+
             });
             alert("Your information has been edited successfully");
-            window.location.replace("http://localhost:8000/?ojr=dashboard");
           };    
           
-          this.handleDone = function (event, context) {
+          this.handleDone = function (event) {
             this.editRow({ rowKey: null });
+            
+            event.preventDefault();
             self.submitTable();
+            
             
           }.bind(this);
 
@@ -461,7 +479,7 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
         
         self.valueChangedListener=function(){
           var searchurl=url+"name/"+$('#search').val()
-          $.get(searchurl,function(data,status){
+          $.get(searchurl,function(data){
             var employeesData = data;
             self.EmployeesDataProvider(new ArrayDataProvider(employeesData,{KeyAttributes: 'EmployeeNo'}));
           });
@@ -472,15 +490,10 @@ function(accUtils,OffcanvasUtils,ArrayDataProvider,ko,$,keySet,ConverterUtils,Bo
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";
-        
       };
-
       this.disconnected = () => {
-       
       };
-
       this.transitionCompleted = () => {
-        
       };
     }
     return DashboardViewModel;

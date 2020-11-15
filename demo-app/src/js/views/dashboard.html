@@ -153,7 +153,7 @@
                 </oj-bind-if>
             
                 <oj-bind-if test='[[cell.mode=="edit"]]'>
-                  <oj-button on-oj-action="[[handleDone]]" style="width:5em;margin-bottom: 0px;"><span>Save</span></oj-button>
+                  <oj-button  id='save' on-oj-action="[[handleDone]]" style="width:5em;margin-bottom: 0px;"><span>Save</span></oj-button>
                 </oj-bind-if>
               </template>
             
@@ -162,6 +162,7 @@
          </div>
          
 <!------test table end-->
+
 <div id="canvasContainer">
 
 </div>
@@ -206,7 +207,7 @@
 <div>
 <input type="checkbox" id="esalary" style="margin-left:10px"> Edit Salary <br/>
 </div>
-<demo-item></demo-item>
+<demo-item item-id='ssalary'></demo-item>
 <div>
   </div>
 <oj-button id="submit" chroming="callToAction" style="margin-left:10px" on-oj-action="[[submitForm]] ">
@@ -262,4 +263,5 @@ Submit
 </oj-button>
 
 </div>
+
 </div>
