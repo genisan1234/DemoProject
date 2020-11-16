@@ -9,13 +9,8 @@ module.exports = function(grunt) {
                 banner: '' 
             }, 
             files: { 
-                'build/src/css/app-min.css': [ 
-                    'src/css/app.css'
-               ],
-               'build/src/js/jet-composites/demo-item/demo-item-styles-min.css' :
+               '../build/src/js/jet-composites/demo-item/demo-item-styles.css' :
                'src/js/jet-composites/demo-item/demo-item-styles.css'
-
-                
             } 
         } 
     },
@@ -24,18 +19,21 @@ module.exports = function(grunt) {
           banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
         },
         build: {
-          files:[ {src: 'src/js/viewModels/dashboard.js',dest: 'build/src/js/viewModels/dashboard-min.js'},
-           {src: 'src/js/jet-composites/demo-item/demo-item-viewModel.js',dest:'build/src/js/jet-composites/demo-item/data-item-viewModel-min.js'}]
+          files:[ 
+           {src: 'src/js/jet-composites/demo-item/demo-item-viewModel.js',dest:'../build/src/js/jet-composites/demo-item/demo-item-viewModel.js'}]
         }
-      }
+      },
+      clean:['../build/src/js/jet-composites/demo-item/demo-item-viewModel.js','../build/src/js/jet-composites/demo-item/demo-item-styles.css','../build/src/js/accUtils.js']
+
     });
     
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    // Default task(s).
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    //Register tasks
     grunt.registerTask('douglify','uglify');
     grunt.registerTask('docssmin','cssmin');
+    grunt.registerTask('doclean','clean');
   
   };

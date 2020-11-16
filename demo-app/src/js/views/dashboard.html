@@ -6,28 +6,14 @@
 <div class="oj-hybrid-padding">
   <h1 class="oj-typography-heading-lg">Employees Data</h1>
   <h1 class="oj-typography-heading-xs">Employees Table</h1>
+  <!-----------------Search Bar and {Button for offCanvas}---->
   <div class="oj-bg-warning-10 oj-panel">
   <oj-button style="border-radius:10px;background-color:green;" on-oj-action="[[endDrawer]]">+</oj-button>
   <oj-input-text id="search"   value = ""  label-hint="Search By Name" style="width:25%;" on-value-changed='{{valueChangedListener}}' label-edge="inside"></oj-input-text> 
   </div>
 <div>
-  <div id="table-container" style="width:50%">
-  <!--oj-table
-  aria-label="Employees Table"
-  data='{{SearchDataProvider}}'
-  scroll-policy='loadMoreOnScroll'
-  scroll-policy-options='{"fetchSize": 10}'
-  selection-mode.row='single'
-  selected.row='{{selectedRow}}'
-  on-selected-changed='{{selectedListener}}'
-  columns='[{"headerText": "Employee No", "field": "EmployeeNo"},
-            {"headerText": "Full Name","field": "FullName"},
-            {"headerText": "DOB", "field": "DOB"},
-            {"headerText": "Country", "field": "Country"},
-            {"headerText": "Gender", "field": "Gender"},
-            {"headerText": "Salary","field": "Salary"}]' >
-</oj-table-->
-</div>
+<!----------------------------------------------------------------->
+<!--Editable Table containing the Employee Information-->
 <div id="tableWrapper" class="oj-bg-warning-10 oj-panel">       
                    
             <oj-table id="table"
@@ -161,47 +147,59 @@
                 
          </div>
          
-<!------test table end-->
-
+<!-------------------------------------------------------------------------->
+<!---OffCvas utility Container for new Employee  Registration-->
 <div id="canvasContainer">
 
 </div>
 </div>
+<!------------------------------------------------->
+<!------Form for Editing the employee info--------->
 <div id="form-container" class="hide-display oj-bg-neutral-20 oj-panel" style="max-width:100%">
     <h1 class="oj-typography-heading-xs">Edit Form</h1>
     <div class="oj-sm-margin-2x-bottom oj-bg-brand-10 oj-panel">
     <form id="editForm" style="max-width:90%" action="http://127.0.0.1:8080/" method="post">
-    
-    <div style="max-width:15em;float:left;padding:10px">
+    <div class="oj-flex">
+
+    <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px">
     <oj-input-text id="employeeNo"   value = "" disabled="true"  label-hint="Employee Number" label-edge="inside"></oj-input-text> 
     </div>
-    <div style="max-width:15em;float:left;padding:10px">
+    <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px">
     <oj-input-text id="firstName"  value = "{{firstname}}" style="max-width:15em;float:left" validators = '[[validators]]' required="true" label-hint="First Name" label-edge="inside"></oj-input-text>
     </div>
-    <div style="max-width:15em;float:left;padding:10px">
+    <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px">
     <oj-input-text id="lastName"  value = "{{lastname}}" required="true" style="max-width:15em;" label-hint="Last Name" label-edge="inside"></oj-input-text>
   </div>
-  <div style="max-width:15em;float:left;padding:10px"> 
+  <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px"> 
     <oj-input-text id="fullName"  value = "[[fullname]]" disabled="true" style="max-width:15em;" label-hint="Full Name" label-edge="inside"></oj-input-text>
   </div>
-  <div style="max-width:15em;float:left;padding:10px"> 
+  <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px"> 
     <oj-input-date id="dateOfBirth"  value = "" label-hint="Date Of Birth" style="max-width:15em;" label-edge="inside"></oj-input-date>
   </div>
+</div>
+<div class="oj-flex">
+  <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px">
+  <oj-label for="countrySelect"></oj-label>
     <oj-select-single id="countrySelect"
     label-hint="Country"
-    style="min-width:10em;max-width:15em;padding-left:10px;padding-right:10px"
     data="[[countryDataProvider]]" 
     value="{{countryVal}}">
   </oj-select-single>
-  
+  </div>
+  <div class="oj-flex-item" style="max-width:15em;float:left;padding:10px">
+    <oj-label for="genderSelect"></oj-label>
     <oj-select-single id="genderSelect"
     label-hint="Gender"
-    style="max-width:15em;padding-right:10px"
     data="[[genderTypesProvider]]" 
     value="{{genderVal}}">
   </oj-select-single>
+  </div>
+  <div class="oj-flex-item" style="max-width:15em;float:left;padding-top:4vh">
     <oj-input-number aria-label='currency-output'  id="salary" disabled="true" style="max-width:15em;" label-hint="$"></oj-input-number>
+  </div>  
+  </div>
 </div> 
+
 </form>
 <div class="oj-bg-brand-10 oj-panel">
 <div>
@@ -215,6 +213,8 @@
 </oj-button>
 </div>
 </div>
+<!-------------------------------------------->
+<!------OffCanvas Utility-------------------->
 <div id="endDrawer" class="oj-offcanvas-start oj-panel oj-bg-info-30 oj-offcanvas-overlay-shadow" style="max-width:730px;height:630px;padding:100px;padding-left:200px" >
   <h1 class="oj-typography-heading-xs">New Employee  Form</h1>
   <form id="canvasForm" action="http://127.0.0.1:8080/" method="post">
@@ -263,5 +263,6 @@ Submit
 </oj-button>
 
 </div>
+<!------------------------------------>
 
 </div>

@@ -18,7 +18,7 @@ define(['knockout', 'ojs/ojmodule-element-utils', 'ojs/ojknockouttemplateutils',
       // Handle announcements sent when pages change, for Accessibility.
       this.manner = ko.observable('polite');
       this.message = ko.observable();
-      announcementHandler = (event) => {
+      announcementHandler = (event)=>{
           this.message(event.detail.message);
           this.manner(event.detail.manner);
       };
@@ -53,14 +53,14 @@ define(['knockout', 'ojs/ojmodule-element-utils', 'ojs/ojknockouttemplateutils',
 
       // Drawer
       // Close offcanvas on medium and larger screens
-      this.mdScreen.subscribe(() => {OffcanvasUtils.close(this.drawerParams);});
+      this.mdScreen.subscribe(function(){OffcanvasUtils.close(this.drawerParams);});
       this.drawerParams = {
         displayMode: 'push',
         selector: '#navDrawer',
         content: '#pageContent'
       };
       // Called by navigation drawer toggle button and after selection of nav drawer item
-      this.toggleDrawer = () => {
+      this.toggleDrawer = function(){
         this.navDrawerOn = true;
         return OffcanvasUtils.toggle(this.drawerParams);
       }
